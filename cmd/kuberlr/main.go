@@ -56,6 +56,7 @@ func newRootCmd() *cobra.Command {
 	)
 
 	flags.RegisterVerboseFlag(cmd.PersistentFlags())
+	flags.RegisterAllowDownloadFlag(cmd.PersistentFlags())
 
 	return cmd
 }

@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
 	"github.com/flavio/kuberlr/internal/common"
@@ -12,7 +13,8 @@ const DefaultTimeout = 5
 
 // Cfg is used to retrieve the configuration of kuberlr.
 type Cfg struct {
-	Paths []string
+	Paths         []string
+	AllowDownload bool
 }
 
 // NewCfg returns a new Cfg object that is pre-configured
@@ -42,6 +44,11 @@ func (c *Cfg) Load() (*viper.Viper, error) {
 		if err := mergeConfig(v, path); err != nil {
 			return viper.New(), err
 		}
+	}
+
+	// Override with flag value if set
+	if pflag.Lookup("allow-download").Changed {
+		v.Set("AllowDownload", c.AllowDownload)
 	}
 
 	return v, nil
